@@ -18,6 +18,19 @@ AWS Lambda → S3 → Databricks (Bronze → Silver → Gold) → Iceberg Tables
 
 ---
 
+## ⚙️ Pipeline Orchestration (Databricks Workflows)
+
+The pipeline is orchestrated using Databricks Workflows to manage dependencies between Bronze, Silver, and Gold layers.
+
+The workflow ensures that ingestion, transformation, and metric computation run in a structured and reliable sequence.
+
+**Workflow DAG:**
+- Bronze → Silver → Gold
+
+![Workflow](images/databricks/workflows/pipeline_workflow.png)
+
+---
+
 ## ⚙️ Tech Stack
 
 * **AWS**: Lambda, S3, IAM
@@ -41,6 +54,17 @@ These events simulate real-world SaaS billing systems with:
 * cancellations
 * late-arriving events
 * duplicate events
+
+### Event Simulation Strategy
+
+The Lambda function supports controlled historical replay by using a configurable base date.  
+This allows generating events for specific time ranges while still simulating late-arriving data.
+
+Each run produces:
+- events for the base date
+- late events from previous 1–3 days
+
+This approach enables realistic time-series generation while maintaining control over the data timeline.
 
 ---
 
@@ -75,7 +99,7 @@ The Silver layer reconstructs subscription lifecycle using CDC logic.
 
 ## 🥇 Gold Layer (Business Metrics)
 
-The Gold layer produces analytics-ready datasets.
+The Gold layer transforms subscription state data into business-facing metrics, separating activity (events) from state (snapshots) to enable accurate analytics.
 
 ### Daily Activity Metrics
 
@@ -103,6 +127,8 @@ Captures point-in-time metrics:
 ---
 
 ## 📊 Analytics Layer (Snowflake)
+
+The analytics layer combines event-based activity data with point-in-time snapshots to produce business KPIs and trends.
 
 Delta UniForm tables are exposed as Iceberg tables and queried in Snowflake.
 
