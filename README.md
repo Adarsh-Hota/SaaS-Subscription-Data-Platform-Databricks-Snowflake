@@ -8,9 +8,9 @@ It demonstrates modern data engineering practices including streaming ingestion,
 
 ---
 
-## 🏗️ Architecture
+## 🟨 Architecture
 
-![Architecture](images/architecture/architecture_diagram.png)
+Architecture
 
 ### Data Flow
 
@@ -18,42 +18,43 @@ AWS Lambda → S3 → Databricks (Bronze → Silver → Gold) → Iceberg Tables
 
 ---
 
-## ⚙️ Pipeline Orchestration (Databricks Workflows)
+## 🟦 Pipeline Orchestration (Databricks Workflows)
 
 The pipeline is orchestrated using Databricks Workflows to manage dependencies between Bronze, Silver, and Gold layers.
 
 The workflow ensures that ingestion, transformation, and metric computation run in a structured and reliable sequence.
 
 **Workflow DAG:**
+
 - Bronze → Silver → Gold
 
-![Workflow](images/databricks/workflows/pipeline_workflow.png)
+Workflow
 
 ---
 
-## ⚙️ Tech Stack
+## 🟧 Tech Stack
 
-* **AWS**: Lambda, S3, IAM
-* **Databricks**: Auto Loader, Structured Streaming, Delta Lake, Unity Catalog
-* **Storage Format**: Delta Lake with Iceberg (Delta UniForm)
-* **Warehouse**: Snowflake (Analytics Layer)
-* **Languages**: Python (PySpark), SQL
+- **AWS**: Lambda, S3, IAM
+- **Databricks**: Auto Loader, Structured Streaming, Delta Lake, Unity Catalog
+- **Storage Format**: Delta Lake with Iceberg (Delta UniForm)
+- **Warehouse**: Snowflake (Analytics Layer)
+- **Languages**: Python (PySpark), SQL
 
 ---
 
-## 📥 Data Ingestion (AWS)
+## 🟫 Data Ingestion (AWS)
 
 Raw subscription events are generated using AWS Lambda and stored in S3.
 
-![S3 Events](images/aws/s3_raw_events.png)
+S3 Events
 
 These events simulate real-world SaaS billing systems with:
 
-* subscription activations
-* upgrades/downgrades
-* cancellations
-* late-arriving events
-* duplicate events
+- subscription activations
+- upgrades/downgrades
+- cancellations
+- late-arriving events
+- duplicate events
 
 ---
 
@@ -70,6 +71,7 @@ To simulate realistic SaaS subscription behavior, the pipeline uses a controlled
 Additionally, snapshot backfill logic is included in the Gold layer to generate historical time-series data for analytics.
 
 This approach enables:
+
 - realistic time-based trends
 - testing of late-arriving data handling
 - accurate point-in-time analytics
@@ -80,13 +82,13 @@ This approach enables:
 
 Raw JSON events are ingested into Databricks using Auto Loader.
 
-![Bronze Table](images/databricks/bronze/bronze_table.png)
+Bronze Table
 
 ### Key Features
 
-* Streaming ingestion
-* Schema enforcement
-* Metadata tracking (`processed_at`, `source_file`)
+- Streaming ingestion
+- Schema enforcement
+- Metadata tracking (`processed_at`, `source_file`)
 
 ---
 
@@ -94,14 +96,14 @@ Raw JSON events are ingested into Databricks using Auto Loader.
 
 The Silver layer reconstructs subscription lifecycle using CDC logic.
 
-![Subscriptions History](images/databricks/silver/subscriptions_history.png)
+Subscriptions History
 
 ### Key Features
 
-* Deduplication using `event_id`
-* Event ordering using `event_time`
-* Subscription state modeling (SCD Type 2 style)
-* Handles late-arriving and out-of-order events
+- Deduplication using `event_id`
+- Event ordering using `event_time`
+- Subscription state modeling (SCD Type 2 style)
+- Handles late-arriving and out-of-order events
 
 ---
 
@@ -109,32 +111,32 @@ The Silver layer reconstructs subscription lifecycle using CDC logic.
 
 The Gold layer transforms subscription state data into business-facing metrics, separating activity (events) from state (snapshots) to enable accurate analytics.
 
-### Daily Activity Metrics
+### ▸ Daily Activity Metrics
 
-![Daily Activity](images/databricks/gold/daily_activity_metrics.png)
+Daily Activity
 
 Tracks:
 
-* new subscriptions
-* cancellations
-* plan changes
+- new subscriptions
+- cancellations
+- plan changes
 
 ---
 
-### Subscription KPIs Snapshot
+### ▸ Subscription KPIs Snapshot
 
-![KPIs Snapshot](images/databricks/gold/subscription_kpis_snapshot.png)
+KPIs Snapshot
 
 Captures point-in-time metrics:
 
-* MRR (Monthly Recurring Revenue)
-* active subscriptions
-* cancelled subscriptions
-* total subscriptions
+- MRR (Monthly Recurring Revenue)
+- active subscriptions
+- cancelled subscriptions
+- total subscriptions
 
 ---
 
-## 📊 Analytics Layer (Snowflake)
+## ◼ Analytics Layer (Snowflake)
 
 The analytics layer combines event-based activity data with point-in-time snapshots to produce business KPIs and trends.
 
@@ -142,91 +144,91 @@ Delta UniForm tables are exposed as Iceberg tables and queried in Snowflake.
 
 ---
 
-### 🟢 Business Dashboard (Primary Output)
+### 🔵 Business Dashboard (Primary Output)
 
-![Business Dashboard](images/snowflake/business_dashboard.png)
+Business Dashboard
 
 Combines activity and state data to provide:
 
-* MRR
-* churn rate
-* net growth
-* active subscriptions
+- MRR
+- churn rate
+- net growth
+- active subscriptions
 
 ---
 
-### 🟢 Churn Analysis
+### 🔵 Churn Analysis
 
-![Churn Analysis](images/snowflake/churn_analysis.png)
+Churn Analysis
 
 Measures percentage of cancellations relative to active subscriptions.
 
 ---
 
-### 🟢 ARPU Analysis
+### 🔵 ARPU Analysis
 
-![ARPU Analysis](images/snowflake/arpu_analysis.png)
+ARPU Analysis
 
 Average revenue per active subscription.
 
 ---
 
-### 🟢 Subscription Growth
+### 🔵 Subscription Growth
 
-![Subscription Growth](images/snowflake/subscription_growth.png)
+Subscription Growth
 
 Tracks net growth using new subscriptions and cancellations.
 
 ---
 
-### 🟢 MRR Trend
+### 🔵 MRR Trend
 
-![MRR Trend](images/snowflake/mrr_trend.png)
+MRR Trend
 
 Shows revenue growth over time.
 
 ---
 
-### 🟢 Active Subscriptions Trend
+### 🔵 Active Subscriptions Trend
 
-![Active Subs](images/snowflake/active_subs_trend.png)
+Active Subs
 
 Tracks growth of active users.
 
 ---
 
-### 🟢 MRR Change
+### 🔵 MRR Change
 
-![MRR Change](images/snowflake/mrr_change.png)
+MRR Change
 
 Shows day-over-day revenue changes.
 
 ---
 
-## 🧠 Key Concepts Demonstrated
+## 🔶 Business Metrics Modeled
 
-* Event-driven architecture
-* Streaming ingestion (Auto Loader)
-* Medallion architecture (Bronze, Silver, Gold)
-* CDC / SCD Type 2 modeling
-* Data lakehouse design (Delta Lake)
-* Iceberg compatibility using Delta UniForm
-* Separation of processing (Databricks) and analytics (Snowflake)
-* Flow vs State modeling for business metrics
+- Monthly Recurring Revenue (MRR)
+- Churn Rate
+- ARPU (Average Revenue Per User)
+- Subscription Growth
+- Net Growth
 
 ---
 
-## 🎯 Business Metrics Modeled
+## 🔑 Key Concepts Demonstrated
 
-* Monthly Recurring Revenue (MRR)
-* Churn Rate
-* ARPU (Average Revenue Per User)
-* Subscription Growth
-* Net Growth
+- Event-driven architecture
+- Streaming ingestion (Auto Loader)
+- Medallion architecture (Bronze, Silver, Gold)
+- CDC / SCD Type 2 modeling
+- Data lakehouse design (Delta Lake)
+- Iceberg compatibility using Delta UniForm
+- Separation of processing (Databricks) and analytics (Snowflake)
+- Flow vs State modeling for business metrics
 
 ---
 
-## 🚀 How to Run
+## 🟪 How to Run
 
 1. Deploy AWS Lambda for event generation
 2. Configure S3 bucket for raw event storage
@@ -238,22 +240,34 @@ Shows day-over-day revenue changes.
 
 ---
 
-## 📂 Project Structure
+## 🧩 Project Structure
 
 ```
 subscription-revenue-data-platform/
 
 ├── aws/
+│   └── lambda_event_generator.py
+
 ├── databricks/
+│   ├── bronze/
+│   ├── silver/
+│   └── gold/
+
 ├── snowflake/
+│   ├── tables.sql
+│   └── views.sql
+
 ├── images/
-├── architecture/
+│   ├── architecture/
+│   ├── databricks/
+│   └── snowflake/
+
 └── README.md
 ```
 
 ---
 
-## 💡 Summary
+## 📍Summary
 
 This project demonstrates how raw event data from a SaaS system can be transformed into meaningful business insights using a modern cloud data stack.
 
