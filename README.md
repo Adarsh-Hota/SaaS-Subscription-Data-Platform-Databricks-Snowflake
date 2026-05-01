@@ -10,7 +10,7 @@ It demonstrates modern data engineering practices including streaming ingestion,
 
 ## 🟨 Architecture
 
-Architecture
+![Architecture](images/architecture/architecture_diagram.png)
 
 ### Data Flow
 
@@ -28,7 +28,7 @@ The workflow ensures that ingestion, transformation, and metric computation run 
 
 - Bronze → Silver → Gold
 
-Workflow
+![Workflow](images/databricks/workflows/pipeline_workflow.png)
 
 ---
 
@@ -46,7 +46,7 @@ Workflow
 
 Raw subscription events are generated using AWS Lambda and stored in S3.
 
-S3 Events
+![S3 Events](images/aws/s3_raw_events.png)
 
 These events simulate real-world SaaS billing systems with:
 
@@ -82,7 +82,7 @@ This approach enables:
 
 Raw JSON events are ingested into Databricks using Auto Loader.
 
-Bronze Table
+![Bronze Table](images/databricks/bronze/bronze_table.png)
 
 ### Key Features
 
@@ -96,7 +96,7 @@ Bronze Table
 
 The Silver layer reconstructs subscription lifecycle using CDC logic.
 
-Subscriptions History
+![Subscriptions History](images/databricks/silver/subscriptions_history.png)
 
 ### Key Features
 
@@ -113,7 +113,7 @@ The Gold layer transforms subscription state data into business-facing metrics, 
 
 ### ▸ Daily Activity Metrics
 
-Daily Activity
+![Daily Activity](images/databricks/gold/daily_activity_metrics.png)
 
 Tracks:
 
@@ -125,7 +125,7 @@ Tracks:
 
 ### ▸ Subscription KPIs Snapshot
 
-KPIs Snapshot
+![KPIs Snapshot](images/databricks/gold/subscription_kpis_snapshot.png)
 
 Captures point-in-time metrics:
 
@@ -146,7 +146,7 @@ Delta UniForm tables are exposed as Iceberg tables and queried in Snowflake.
 
 ### 🔵 Business Dashboard (Primary Output)
 
-Business Dashboard
+![Business Dashboard](images/snowflake/business_dashboard.png)
 
 Combines activity and state data to provide:
 
@@ -159,7 +159,7 @@ Combines activity and state data to provide:
 
 ### 🔵 Churn Analysis
 
-Churn Analysis
+![Churn Analysis](images/snowflake/churn_analysis.png)
 
 Measures percentage of cancellations relative to active subscriptions.
 
@@ -167,7 +167,7 @@ Measures percentage of cancellations relative to active subscriptions.
 
 ### 🔵 ARPU Analysis
 
-ARPU Analysis
+![ARPU Analysis](images/snowflake/arpu_analysis.png)
 
 Average revenue per active subscription.
 
@@ -175,7 +175,7 @@ Average revenue per active subscription.
 
 ### 🔵 Subscription Growth
 
-Subscription Growth
+![Subscription Growth](images/snowflake/subscription_growth.png)
 
 Tracks net growth using new subscriptions and cancellations.
 
@@ -183,7 +183,7 @@ Tracks net growth using new subscriptions and cancellations.
 
 ### 🔵 MRR Trend
 
-MRR Trend
+![MRR Trend](images/snowflake/mrr_trend.png)
 
 Shows revenue growth over time.
 
@@ -191,7 +191,7 @@ Shows revenue growth over time.
 
 ### 🔵 Active Subscriptions Trend
 
-Active Subs
+![Active Subs](images/snowflake/active_subs_trend.png)
 
 Tracks growth of active users.
 
@@ -199,7 +199,7 @@ Tracks growth of active users.
 
 ### 🔵 MRR Change
 
-MRR Change
+![MRR Change](images/snowflake/mrr_change.png)
 
 Shows day-over-day revenue changes.
 
