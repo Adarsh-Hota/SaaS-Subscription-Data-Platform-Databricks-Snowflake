@@ -55,16 +55,24 @@ These events simulate real-world SaaS billing systems with:
 * late-arriving events
 * duplicate events
 
-### Event Simulation Strategy
+---
 
-The Lambda function supports controlled historical replay by using a configurable base date.  
-This allows generating events for specific time ranges while still simulating late-arriving data.
+## 🧪 Data Simulation Strategy
 
-Each run produces:
-- events for the base date
-- late events from previous 1–3 days
+To simulate realistic SaaS subscription behavior, the pipeline uses a controlled event generation approach.
 
-This approach enables realistic time-series generation while maintaining control over the data timeline.
+- A configurable `BASE_DATE` is used in AWS Lambda to generate events
+- Each run produces:
+  - events for the base date
+  - late-arriving events from the previous 1–3 days
+- This mimics real-world data latency and delayed event ingestion
+
+Additionally, snapshot backfill logic is included in the Gold layer to generate historical time-series data for analytics.
+
+This approach enables:
+- realistic time-based trends
+- testing of late-arriving data handling
+- accurate point-in-time analytics
 
 ---
 
