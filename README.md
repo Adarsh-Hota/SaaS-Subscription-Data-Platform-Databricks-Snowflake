@@ -6,8 +6,6 @@ This project simulates a SaaS subscription platform and builds an end-to-end dat
 
 It demonstrates modern data engineering practices including streaming ingestion, CDC-based modeling, medallion architecture, and cross-platform analytics using AWS, Databricks, and Snowflake.
 
----
-
 ## 🟨 Architecture
 
 ![Architecture](images/architecture/architecture_diagram.png)
@@ -15,8 +13,6 @@ It demonstrates modern data engineering practices including streaming ingestion,
 ### Data Flow
 
 AWS Lambda → S3 → Databricks (Bronze → Silver → Gold) → Iceberg Tables → Snowflake → Analytics Views
-
----
 
 ## 🟦 Pipeline Orchestration (Databricks Workflows)
 
@@ -30,8 +26,6 @@ The workflow ensures that ingestion, transformation, and metric computation run 
 
 ![Workflow](images/databricks/workflows/pipeline_workflow.png)
 
----
-
 ## 🟧 Tech Stack
 
 - **AWS**: Lambda, S3, IAM
@@ -39,8 +33,6 @@ The workflow ensures that ingestion, transformation, and metric computation run 
 - **Storage Format**: Delta Lake with Iceberg (Delta UniForm)
 - **Warehouse**: Snowflake (Analytics Layer)
 - **Languages**: Python (PySpark), SQL
-
----
 
 ## 🟫 Data Ingestion (AWS)
 
@@ -55,8 +47,6 @@ These events simulate real-world SaaS billing systems with:
 - cancellations
 - late-arriving events
 - duplicate events
-
----
 
 ## 🧪 Data Simulation Strategy
 
@@ -76,8 +66,6 @@ This approach enables:
 - testing of late-arriving data handling
 - accurate point-in-time analytics
 
----
-
 ## 🥉 Bronze Layer (Raw Ingestion)
 
 Raw JSON events are ingested into Databricks using Auto Loader.
@@ -89,8 +77,6 @@ Raw JSON events are ingested into Databricks using Auto Loader.
 - Streaming ingestion
 - Schema enforcement
 - Metadata tracking (`processed_at`, `source_file`)
-
----
 
 ## 🥈 Silver Layer (State Modeling)
 
@@ -104,8 +90,6 @@ The Silver layer reconstructs subscription lifecycle using CDC logic.
 - Event ordering using `event_time`
 - Subscription state modeling (SCD Type 2 style)
 - Handles late-arriving and out-of-order events
-
----
 
 ## 🥇 Gold Layer (Business Metrics)
 
@@ -121,8 +105,6 @@ Tracks:
 - cancellations
 - plan changes
 
----
-
 ### ▸ Subscription KPIs Snapshot
 
 ![KPIs Snapshot](images/databricks/gold/subscription_kpis_snapshot.png)
@@ -134,15 +116,11 @@ Captures point-in-time metrics:
 - cancelled subscriptions
 - total subscriptions
 
----
-
 ## ◼ Analytics Layer (Snowflake)
 
 The analytics layer combines event-based activity data with point-in-time snapshots to produce business KPIs and trends.
 
 Delta UniForm tables are exposed as Iceberg tables and queried in Snowflake.
-
----
 
 ### 🔵 Business Dashboard (Primary Output)
 
@@ -155,15 +133,11 @@ Combines activity and state data to provide:
 - net growth
 - active subscriptions
 
----
-
 ### 🔵 Churn Analysis
 
 ![Churn Analysis](images/snowflake/churn_analysis.png)
 
 Measures percentage of cancellations relative to active subscriptions.
-
----
 
 ### 🔵 ARPU Analysis
 
@@ -171,15 +145,11 @@ Measures percentage of cancellations relative to active subscriptions.
 
 Average revenue per active subscription.
 
----
-
 ### 🔵 Subscription Growth
 
 ![Subscription Growth](images/snowflake/subscription_growth.png)
 
 Tracks net growth using new subscriptions and cancellations.
-
----
 
 ### 🔵 MRR Trend
 
@@ -187,23 +157,17 @@ Tracks net growth using new subscriptions and cancellations.
 
 Shows revenue growth over time.
 
----
-
 ### 🔵 Active Subscriptions Trend
 
 ![Active Subs](images/snowflake/active_subs_trend.png)
 
 Tracks growth of active users.
 
----
-
 ### 🔵 MRR Change
 
 ![MRR Change](images/snowflake/mrr_change.png)
 
 Shows day-over-day revenue changes.
-
----
 
 ## 🔶 Business Metrics Modeled
 
@@ -212,8 +176,6 @@ Shows day-over-day revenue changes.
 - ARPU (Average Revenue Per User)
 - Subscription Growth
 - Net Growth
-
----
 
 ## 🔑 Key Concepts Demonstrated
 
@@ -226,8 +188,6 @@ Shows day-over-day revenue changes.
 - Separation of processing (Databricks) and analytics (Snowflake)
 - Flow vs State modeling for business metrics
 
----
-
 ## 🟪 How to Run
 
 1. Deploy AWS Lambda for event generation
@@ -237,8 +197,6 @@ Shows day-over-day revenue changes.
 5. Expose Gold tables as Iceberg (Delta UniForm)
 6. Connect Snowflake and create external Iceberg tables
 7. Run Snowflake SQL scripts to create analytics views
-
----
 
 ## 🧩 Project Structure
 
@@ -264,8 +222,6 @@ subscription-revenue-data-platform/
 
 └── README.md
 ```
-
----
 
 ## 📍Summary
 
