@@ -16,13 +16,14 @@ AWS Lambda → S3 → Databricks (Bronze → Silver → Gold) → Iceberg Tables
 
 ## 🟦 Pipeline Orchestration (Databricks Workflows)
 
-The pipeline is orchestrated using Databricks Workflows to manage dependencies between Bronze, Silver, and Gold layers.
+The pipeline is orchestrated using Databricks Workflows to keep things structured across Bronze, Silver, and Gold layers.
 
-The workflow ensures that ingestion, transformation, and metric computation run in a structured and reliable sequence.
+Each run follows a simple flow:
+- Bronze ingestion (Auto Loader)
+- Silver transformations (cleaning + state modeling)
+- Gold aggregations and snapshots
 
-**Workflow DAG:**
-
-- Bronze → Silver → Gold
+This setup makes it easy to run the pipeline consistently without manually triggering each step.
 
 ![Workflow](images/databricks/workflows/pipeline_workflow.png)
 
@@ -50,21 +51,16 @@ These events simulate real-world SaaS billing systems with:
 
 ## 🧪 Data Simulation Strategy
 
-To simulate realistic SaaS subscription behavior, the pipeline uses a controlled event generation approach.
+To make the data feel realistic, events are generated in a controlled way instead of just random inserts.
 
-- A configurable `BASE_DATE` is used in AWS Lambda to generate events
-- Each run produces:
-  - events for the base date
-  - late-arriving events from the previous 1–3 days
-- This mimics real-world data latency and delayed event ingestion
+- A configurable `BASE_DATE` is used in Lambda
+- Each run generates:
+  - events for that day
+  - late events from the previous 1–3 days
 
-Additionally, snapshot backfill logic is included in the Gold layer to generate historical time-series data for analytics.
+This helps simulate real-world issues like delayed ingestion and out-of-order events.
 
-This approach enables:
-
-- realistic time-based trends
-- testing of late-arriving data handling
-- accurate point-in-time analytics
+I also added snapshot backfill logic in the Gold layer so I could generate historical data and build meaningful time-series metrics.
 
 ## 🥉 Bronze Layer (Raw Ingestion)
 
@@ -227,4 +223,4 @@ subscription-revenue-data-platform/
 
 This project demonstrates how raw event data from a SaaS system can be transformed into meaningful business insights using a modern cloud data stack.
 
-It highlights the complete journey from data generation to analytics consumption.
+It covers the full flow, from event generation to analytics, while handling real-world challenges like late-arriving data, state modeling, and snapshot-based metrics.
